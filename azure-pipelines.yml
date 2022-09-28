@@ -1,0 +1,52 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+
+steps:
+# GitVersioning
+# Make sure you have disabled shallow fetch of git sources setting on azure devops
+# https://github.com/dotnet/Nerdbank.GitVersioning/blob/main/doc/nbgv-cli.md
+#- task: DotNetCoreCLI@2  
+#  displayName: Install NBGV tool
+#  inputs:
+#    command: custom
+#    custom: tool
+#    arguments: install --tool-path . nbgv
+
+# disabled as i prefer incremental build numbers by date
+#- script: nbgv cloud -a
+#  displayName: Set Version
+
+# Run donet scripts
+- script: dotnet restore
+  displayName: 'dotnet restore'
+- script: dotnet build --configuration $(buildConfiguration) --no-restore
+  displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet test --no-build --configuration $(buildConfiguration)
+  displayName: 'dotnet test $(buildConfiguration)'
+
+# Generate artifacts for deployment
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish $(buildConfiguration)'
+  inputs:
+    command: publish
+    zipAfterPublish: true
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    #projects: '**/*.csproj'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'drop'
