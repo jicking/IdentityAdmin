@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityAdmin", "IdentityAdmin\IdentityAdmin.csproj", "{5CDAC4E0-6CAF-4652-B651-CBC594798C25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityAdmin.Data", "IdentityAdmin.Data\IdentityAdmin.Data.csproj", "{5B40C766-8B9C-4332-B135-82B8AE2DFFD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5CDAC4E0-6CAF-4652-B651-CBC594798C25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CDAC4E0-6CAF-4652-B651-CBC594798C25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CDAC4E0-6CAF-4652-B651-CBC594798C25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B40C766-8B9C-4332-B135-82B8AE2DFFD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B40C766-8B9C-4332-B135-82B8AE2DFFD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B40C766-8B9C-4332-B135-82B8AE2DFFD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B40C766-8B9C-4332-B135-82B8AE2DFFD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
