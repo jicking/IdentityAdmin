@@ -14,6 +14,7 @@ public class SetupModel : PageModel {
 			"admin@admin.admin"
 		};
 
+
 		await Initialize(_serviceProvider, defaultUsers);
 	}
 
