@@ -9,24 +9,30 @@ public class SetupModel : PageModel {
 		_serviceProvider = serviceProvider;
 	}
 	public async Task OnGet() {
-		var defaultUsers = new List<string>() {
+		var defaultUserEmails = new List<string>() {
 			"admin@admin.admin"
 		};
 
 
-		await Initialize(_serviceProvider, defaultUsers);
+		await Initialize(_serviceProvider, defaultUserEmails);
 	}
 
-	public static async Task Initialize(IServiceProvider serviceProvider,
-									List<string> userList) {
-		var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+	public static async Task Initialize(
+		IServiceProvider serviceProvider,
+		List<string> userEmails) {
 
-		foreach (var userName in userList) {
+		var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+		var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+		foreach (var email in userEmails) {
 			var userPassword = GenerateSecurePassword();
-			var userId = await EnsureUser(userManager, userName, userPassword);
+			var userId = await EnsureUser(userManager, email, userPassword);
 
 			// NotifyUser(userName, userPassword);
 		}
+
+		// Roles
+		// roleManager.CreateAsync()
 	}
 
 	private static string GenerateSecurePassword() {
@@ -34,11 +40,12 @@ public class SetupModel : PageModel {
 	}
 
 	private static async Task<string> EnsureUser(UserManager<IdentityUser> userManager,
-												 string userName, string userPassword) {
-		var user = await userManager.FindByNameAsync(userName);
+												 string email, string userPassword) {
+		var user = await userManager.FindByNameAsync(email);
 
 		if (user == null) {
-			user = new IdentityUser(userName) {
+			user = new IdentityUser(email) {
+				Email = email,
 				EmailConfirmed = true
 			};
 			await userManager.CreateAsync(user, userPassword);
