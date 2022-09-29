@@ -16,7 +16,7 @@ variables:
 steps:
 # GitVersioning
 # Make sure you have disabled shallow fetch of git sources setting on azure devops
-# https://github.com/dotnet/Nerdbank.GitVersioning/blob/main/doc/nbgv-cli.md
+# Edit Pipeline > Triggers > YAML > Get Sources > Shallow Fetch
 #- task: DotNetCoreCLI@2  
 #  displayName: Install NBGV tool
 #  inputs:
@@ -24,7 +24,7 @@ steps:
 #    custom: tool
 #    arguments: install --tool-path . nbgv
 
-# disabled as i prefer incremental build numbers by date
+# disabled as this is set on version.json
 #- script: nbgv cloud -a
 #  displayName: Set Version
 

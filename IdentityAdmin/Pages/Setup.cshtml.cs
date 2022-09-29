@@ -9,24 +9,41 @@ public class SetupModel : PageModel {
 		_serviceProvider = serviceProvider;
 	}
 	public async Task OnGet() {
-		var defaultUserEmails = new List<string>() {
-			"admin@admin.admin"
-		};
-
-
-		await Initialize(_serviceProvider, defaultUserEmails);
+		await Initialize(_serviceProvider);
 	}
 
 	public static async Task Initialize(
-		IServiceProvider serviceProvider,
-		List<string> userEmails) {
+		IServiceProvider serviceProvider
+		) {
 
-		var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+		var defaultUserRoles = new List<string>() {
+			"admin",
+			"manager",
+			"user"
+		};
+
+		var defaultUsers = new Dictionary<string, string>() {
+			{"admin", "admin@identityadmin.net" },
+			{"manager", "manager@identityadmin.net" },
+			{"user", "user@identityadmin.net" },
+		};
+
 		var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+		var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
 
-		foreach (var email in userEmails) {
+		// Create default roles
+		foreach (var roleName in defaultUserRoles) {
+			var role = await roleManager.FindByNameAsync(roleName);
+			if (role == null) {
+				role = new IdentityRole(roleName);
+				await roleManager.CreateAsync(role);
+			}
+		}
+
+		// Create default users
+		foreach (var user in defaultUsers) {
 			var userPassword = GenerateSecurePassword();
-			var userId = await EnsureUser(userManager, email, userPassword);
+			var userId = await CreateUser(userManager, roleManager, user.Key, user.Value, userPassword);
 
 			// NotifyUser(userName, userPassword);
 		}
@@ -36,19 +53,29 @@ public class SetupModel : PageModel {
 	}
 
 	private static string GenerateSecurePassword() {
-		return "@dminPassw0rd";
+		return "s@fePassw0rd";
 	}
 
-	private static async Task<string> EnsureUser(UserManager<IdentityUser> userManager,
-												 string email, string userPassword) {
+	private static async Task<string> CreateUser(
+		UserManager<IdentityUser> userManager,
+		RoleManager<IdentityRole> roleManager,
+		string username,
+		string email,
+		string userPassword) {
+
 		var user = await userManager.FindByNameAsync(email);
 
 		if (user == null) {
 			user = new IdentityUser(email) {
+				UserName = email,
 				Email = email,
 				EmailConfirmed = true
 			};
 			await userManager.CreateAsync(user, userPassword);
+
+			if (username == "admin") {
+				await userManager.AddToRoleAsync(user, "admin");
+			}
 		}
 
 		return user.Id;

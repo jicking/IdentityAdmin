@@ -22,11 +22,10 @@ public class Program {
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
 			//options.UseInMemoryDatabase("IdentityAdminDb"));
-			builder.Services.AddDefaultIdentity<IdentityUser>(o => {
-				o.SignIn.RequireConfirmedAccount = true;
-				o.User.RequireUniqueEmail = true;
-			})
+			builder.Services.AddDefaultIdentity<IdentityUser>()
+				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
+
 
 			var app = builder.Build();
 
