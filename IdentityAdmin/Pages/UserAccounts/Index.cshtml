@@ -4,64 +4,63 @@
     ViewData["Title"] = "Manage Accounts";
 }
 
-<main class="ms-sm-auto px-md-4">
-    <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Manage User Accounts</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <button type="button" class="btn btn-sm btn-outline-primary mx-1">
-                Create User
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-               More Options
-            </button>
-        </div>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Manage User Accounts</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a class="btn btn-sm btn-outline-primary mx-1" asp-page="/UserAccounts/Create">
+            Create User
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            More Options
+        </button>
     </div>
+</div>
 
-
-
-    <h2 class="h3">User Accounts</h2>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
+<h2 class="h3">User Accounts</h2>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Claims</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model.UserAccounts)
+            {
                 <tr>
-                    <th scope="col">Email</th>
-                    <th scope="col">Roles</th>
-                    <th scope="col">Claims</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Actions</th>
+                    <td>@u.NormalizedEmail </td>
+                    <td><span class="badge bg-dark mx-1">Role</span><span class="badge bg-dark">Role</span></td>
+                    <td><span class="badge bg-dark mx-1">Role</span><span class="badge bg-dark">Role</span></td>
+                    <td>
+                        @if (!u.EmailConfirmed)
+                        {
+                            <span>Disabled <i class="bi bi-x-circle-fill text-success"></i></span>
+                        }
+                        else
+                        {
+                            <span>Active <i class="bi bi-check-circle-fill text-success"></i></span>
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-start">
+                            <button type="button" class="btn btn-sm btn-outline-secondary mx-1"><i class="bi bi-key-fill"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary mx-1"><i class="bi bi-pencil-fill"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3-fill"></i></button>
+                        </div>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var u in Model.UserAccounts)
-                {
-                    <tr>
-                        <td>@u.NormalizedEmail </td>
-                        <td><span class="badge bg-dark mx-1">Role</span><span class="badge bg-dark">Role</span></td>
-                        <td><span class="badge bg-dark mx-1">Role</span><span class="badge bg-dark">Role</span></td>
-                        <td>
-                            @if(!u.EmailConfirmed){
-                                <span>Disabled <i class="bi bi-x-circle-fill text-success"></i></span>
-                            } else {
-                                <span>Active <i class="bi bi-check-circle-fill text-success"></i></span>
-                            }
-                        </td>
-                        <td>
-                            <div class="d-flex justify-content-start">
-                                <button type="button" class="btn btn-sm btn-outline-secondary mx-1"><i class="bi bi-key-fill"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary mx-1"><i class="bi bi-pencil-fill"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3-fill"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                }
-                @if (Model.UserAccounts.Count == 0)
-                {
-                    <tr>
-                        <td colspan="100%" class="text-center"> no data </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</main>
+            }
+            @if (Model.UserAccounts.Count == 0)
+            {
+                <tr>
+                    <td colspan="100%" class="text-center"> no data </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
